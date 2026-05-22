@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: frauddb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: zaeronib
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    image: fraud-dashboard:latest
+    pull_policy: never
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/frauddb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: zaeronib
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
